@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PicturePuzzle</string>
+    <string name="game_clear">Game Clear!</string>
+</resources>
