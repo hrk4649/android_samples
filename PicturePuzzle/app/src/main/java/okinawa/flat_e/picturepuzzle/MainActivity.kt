@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -140,8 +141,7 @@ class Board {
         val shuffled = pieces.clone()
         // Fisher–Yates shuffle
         // https://blog.y-yuki.net/entry/2018/08/22/094000
-        for (n in numOfPiece - 1 downTo 0) {
-            val idx1 = n
+        for (idx1 in numOfPiece - 1 downTo 0) {
             val idx2 = Random.nextInt(0, idx1 + 1)
             val value1 = shuffled[idx1]
             val value2 = shuffled[idx2]
@@ -194,7 +194,7 @@ class Board {
     }
 }
 
-class MainActivity : AppCompatActivity(),View.OnTouchListener {
+class MainActivity : AppCompatActivity() {
     // 画面をタッチしてつかんだイメージビュー
     private var grabbedIV : ImageView? = null
 
@@ -227,6 +227,7 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
         initImageViews()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initImageViews() {
         // 画面サイズ(application display area)の取得
         // https://akira-watson.com/android/screen-size.html
@@ -284,13 +285,16 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
         }
 
         // タッチイベントの設定
-        mainLayout.setOnTouchListener(this)
+        mainLayout.setOnTouchListener{
+            v:View?, event: MotionEvent? ->
+            this.onTouch(v,event)
+        }
     }
 
     /**
      * タッチイベント
      */
-    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+    private fun onTouch(v: View?, event: MotionEvent?): Boolean {
         Log.d("onTouch", "v $v event $event")
         // warningが出たため対応する
         v?.performClick()
@@ -308,6 +312,7 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
      * タッチイベント Start 時
      */
     private fun onTouchStart(v: View?, event: MotionEvent?): Boolean {
+        Log.d("onTouchStart", "v $v event $event")
         when (event?.action) {
             MotionEvent.ACTION_UP -> {
                 // ゲームの初期化
@@ -327,7 +332,7 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
                 }
 
                 // ピースをバラバラにした状態のボード
-                var shuffled  = board.getShuffledPieces()
+                val shuffled  = board.getShuffledPieces()
 
                 // ピースをバラバラの状態で表示する
 
@@ -459,7 +464,7 @@ class MainActivity : AppCompatActivity(),View.OnTouchListener {
                                     textViewGameClear.visibility = TextView.VISIBLE
 
                                     // レイアウトの最上位に表示する
-                                    var mainLayout = findViewById<ConstraintLayout>(R.id.mainLayout)
+                                    val mainLayout = findViewById<ConstraintLayout>(R.id.mainLayout)
                                     mainLayout.removeView(textViewGameClear)
                                     mainLayout.addView(textViewGameClear)
 
