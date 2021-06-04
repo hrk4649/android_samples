@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ServiceSample</string>
+    <string name="notification_title">サンプルサービス</string>
+    <string name="notification_message">サービス起動中です・・・</string>
+</resources>
