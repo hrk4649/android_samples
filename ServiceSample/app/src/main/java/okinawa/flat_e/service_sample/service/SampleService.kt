@@ -10,6 +10,7 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.deploygate.sdk.DeployGate
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -22,7 +23,7 @@ class SampleService : Service() {
         private const val ONGOING_NOTIFICATION_ID = 1
         // https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest
         private const val LOCATION_REQUEST_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
-        private const val LOCATION_REQUEST_INTERVAL_MILLISECOND = 5000L
+        private const val LOCATION_REQUEST_INTERVAL_MILLISECOND = 30000L
     }
 
     private val binder = SampleServiceBinder()
@@ -36,6 +37,7 @@ class SampleService : Service() {
         override fun onLocationResult(locationResult: LocationResult?) {
             location = locationResult?.lastLocation
             Log.d("SampleService.onLocationResult","location: $location")
+            //DeployGate.logDebug("SampleService.onLocationResult:location: $location")
         }
     }
 
@@ -48,7 +50,8 @@ class SampleService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d("SampleService.onStartCommand","called")
+        //Log.d("SampleService.onStartCommand","called")
+        DeployGate.logDebug("SampleService.onStartCommand:called")
         prepareForeground()
         startLocationClient()
 
@@ -57,14 +60,16 @@ class SampleService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("SampleService.onCreate","called")
+        //Log.d("SampleService.onCreate","called")
+        DeployGate.logDebug("SampleService.onCreate:called")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         stopLocationClient()
 
-        Log.d("SampleService.onDestroy","called")
+        //Log.d("SampleService.onDestroy","called")
+        DeployGate.logDebug("SampleService.onDestroy:called")
     }
 
     @SuppressLint("MissingPermission")
@@ -83,7 +88,8 @@ class SampleService : Service() {
     }
 
     private fun prepareForeground() {
-        Log.d("SampleService.prepareForeground","called")
+        //Log.d("SampleService.prepareForeground","called")
+        DeployGate.logDebug("SampleService.prepareForeground:called")
         // https://developer.android.com/guide/components/foreground-services?hl=ja
         // 通知をタップしたときにこのアクテビティを開く
         val pendingIntent: PendingIntent =

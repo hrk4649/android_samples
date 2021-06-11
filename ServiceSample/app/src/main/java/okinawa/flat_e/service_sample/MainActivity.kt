@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
+import com.deploygate.sdk.DeployGate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -20,7 +21,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d("MainActivity.onCreate", "called")
+        //Log.d("MainActivity.onCreate", "called")
+        DeployGate.logDebug("MainActivity.onCreate:called")
 
         startSampleService()
 
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 while(true) {
-                    delay(5000)
+                    delay(30000)
                     val location = serviceConnection?.mService?.location
                     location?.let {
                         val date = Date(location.time)
@@ -46,32 +48,37 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("MainActivity.onDestroy", "called")
+        //Log.d("MainActivity.onDestroy", "called")
+        DeployGate.logDebug("MainActivity.onDestroy:called")
         stopSampleService()
 
         serviceConnection = null
     }
 
     private fun startSampleService() {
-        Log.d("MainActivity.startSampleService", "start Service")
+        //Log.d("MainActivity.startSampleService", "start Service")
+        DeployGate.logDebug("MainActivity.startSampleService:start Service")
         val serviceIntent = Intent(this.application, SampleService::class.java)
         startForegroundService(serviceIntent)
 
         val bindIntent = Intent(this, SampleService::class.java)
         serviceConnection?.let {serviceConnection ->
-            Log.d("MainActivity.startSampleService", "bind Service")
+            //Log.d("MainActivity.startSampleService", "bind Service")
+            DeployGate.logDebug("MainActivity.startSampleService:bind Service")
             bindService(bindIntent, serviceConnection, BIND_AUTO_CREATE)
         }
     }
 
     private fun stopSampleService() {
         if (serviceConnection?.mBound == true) {
-            Log.d("MainActivity.stopSampleService", "unbind Service")
+            //Log.d("MainActivity.stopSampleService", "unbind Service")
+            DeployGate.logDebug("MainActivity.stopSampleService:unbind Service")
             unbindService(serviceConnection!!)
         }
 
         val serviceIntent = Intent(this.application, SampleService::class.java)
-        Log.d("MainActivity.stopSampleService", "stop service")
+        //Log.d("MainActivity.stopSampleService", "stop service")
+        DeployGate.logDebug("MainActivity.stopSampleService:stop service")
         stopService(serviceIntent)
     }
 }
