@@ -1,10 +1,10 @@
 package okinawa.flat_e.service_sample
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.deploygate.sdk.DeployGate
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import okinawa.flat_e.service_sample.service.SampleServiceConnection
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private var serviceConnection:SampleServiceConnection? = SampleServiceConnection()
+    private var serviceConnection: SampleServiceConnection? = SampleServiceConnection()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         val textView1 = findViewById<TextView>(R.id.textView1)
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                while(true) {
+                while (true) {
                     delay(30000)
                     val location = serviceConnection?.mService?.location
                     location?.let {
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-            } catch (e:Exception) {
+            } catch (e: Exception) {
                 Log.e("MainActivity.onCreate", "error:", e)
             }
         }
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         startForegroundService(serviceIntent)
 
         val bindIntent = Intent(this, SampleService::class.java)
-        serviceConnection?.let {serviceConnection ->
+        serviceConnection?.let { serviceConnection ->
             //Log.d("MainActivity.startSampleService", "bind Service")
             DeployGate.logDebug("MainActivity.startSampleService:bind Service")
             bindService(bindIntent, serviceConnection, BIND_AUTO_CREATE)

@@ -72,7 +72,7 @@ class SampleService : Service() {
         DeployGate.logDebug("SampleService.onDestroy:called")
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "VisibleForTests")
     private fun startLocationClient() {
         val locationRequest = LocationRequest.create()
             .setPriority(LOCATION_REQUEST_PRIORITY)
