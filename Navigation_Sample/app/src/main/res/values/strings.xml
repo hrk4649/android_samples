@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Navigation_Sample</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tv_main">Main</string>
+    <string name="tv_sub1">Sub1</string>
+</resources>
