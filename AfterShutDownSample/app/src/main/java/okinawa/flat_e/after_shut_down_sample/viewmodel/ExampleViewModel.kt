@@ -44,4 +44,9 @@ class ExampleViewModel(private val state: SavedStateHandle): ViewModel() {
             text1.value = it.getString("text1")
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("ExampleViewModel.onCleared", "called")
+    }
 }
