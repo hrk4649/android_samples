@@ -1,6 +1,8 @@
 # AfterShutDownSample
 
 This sample is for checking the process of destroying activity due to system constraint.
+In addition to it, this sample uses SavedStateHandle in ViewModel, which saves and restores data to keep the activity's looks after its restart from destroying. 
+
 You can check following things:
 
 - How to make ViewModel with SavedStateHandle
@@ -8,12 +10,14 @@ You can check following things:
 - Failed to access ViewModel after calling onSaveInstanceState()
     - You can observe that
       ``` java.lang.IllegalArgumentException: SavedStateProvider with the given key is already registered ```
-      throws by enabling commented lines in MainActivity.onDestoy()
+      throws by enabling commented lines in MainActivity.onDestroy()
       ```kotlin
         val viewModel: ExampleViewModel by viewModels()
         Log.d("MainActivity.onDestroy", "viewModel.textCheck ${viewModel.textCheck}")
 
 このサンプルはシステム制約によるアクティビティの破棄の動作を確認するものです。
+それに加えて、このサンプルでは SaveStateHandle をビューモデルの中で使います。
+SavedStateHandle は、アクティビティ再開後にその見た目を維持するためにデータを保存、復元します。
 
 以下の項目を確認できます。
 
@@ -21,7 +25,7 @@ You can check following things:
     - データの保存・復元に SavedStateHandle をどう使うか
 - onSavedInstanceState() を呼んだ後に、ビューモデルへのアクセスが失敗する
     - ``` java.lang.IllegalArgumentException: SavedStateProvider with the given key is already registered ``` が
-    スローされるのを観察できます。MainActivity.onDestoy() の コメント部分を有効にしてください。
+    スローされるのを観察できます。MainActivity.onDestroy() の コメント部分を有効にしてください。
       ```kotlin
         val viewModel: ExampleViewModel by viewModels()
         Log.d("MainActivity.onDestroy", "viewModel.textCheck ${viewModel.textCheck}")
