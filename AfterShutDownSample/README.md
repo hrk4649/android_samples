@@ -12,7 +12,6 @@ You can check following things:
       ```kotlin
         val viewModel: ExampleViewModel by viewModels()
         Log.d("MainActivity.onDestroy", "viewModel.textCheck ${viewModel.textCheck}")
-```
 
 このサンプルはシステム制約によるアクティビティの破棄の動作を確認するものです。
 
@@ -26,7 +25,7 @@ You can check following things:
       ```kotlin
         val viewModel: ExampleViewModel by viewModels()
         Log.d("MainActivity.onDestroy", "viewModel.textCheck ${viewModel.textCheck}")
-```
+
 
 References / 参考
 
