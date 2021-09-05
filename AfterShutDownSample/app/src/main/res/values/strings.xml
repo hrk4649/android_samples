@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AfterShutDownSample</string>
+    <string name="tv_1">項目1</string>
+    <string name="btn_show_dialog">SHOW DIALOG</string>
+    <string name="tv_2">項目2</string>
+    <string name="btn_ok">OK</string>
+    <string name="tv_1_2">項目1+項目2</string>
+</resources>
