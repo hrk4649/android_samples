@@ -1,5 +1,7 @@
 # android_samples
 
+- AfterShutDownSample
+  - システム制約によるアクティビティの破棄の動作を確認する
 - DialogSample
   - 画面回転などで、アクティビティを再作成する際に、ダイアログの表示の復元を行う。
 - SampleFallApart
