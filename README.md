@@ -18,3 +18,5 @@
   - アプリケーションコンポーネントの ナビゲーションのサンプル
 - MergeManifest (2022/01/22)
   - AndroidManifest.xml ファイルのマージ 処理を確認する
+- Sample20220121 (2022/01/22)
+  - Espresso で RecyclerView をテストする
