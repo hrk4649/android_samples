@@ -12,6 +12,7 @@ Confirmed Date: 2022/01/22
     - taking screenshot
         - ```DefaultFailureHandler.takeScreenshot()``` seemed not work at this time.
         - declare ```MyFailureHandler``` that implements ```FailureHandler```
+            - use ```UiDevice``` for taking screentest.
         - call ```Espresso.setFailureHandler(MyFailureHandler(appContext))``` before test
 
 ## Environment
@@ -19,6 +20,20 @@ Confirmed Date: 2022/01/22
 - Android Studio Arctic Fox | 2020.3.1 Patch 4
 - Android Gradle Plugin Version: 7.0.3
 - Gradle Version: 7.0.2
+
+dependencies in build.gradle
+
+```
+implementation 'androidx.core:core-ktx:1.7.0'
+implementation 'androidx.appcompat:appcompat:1.4.1'
+implementation 'com.google.android.material:material:1.5.0'
+implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha03'
+androidTestImplementation 'androidx.test:rules:1.4.1-alpha03'
+androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.0-alpha03'
+androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+```
 
 ## References
 
