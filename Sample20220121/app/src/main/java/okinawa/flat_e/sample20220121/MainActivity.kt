@@ -16,5 +16,11 @@ class MainActivity : AppCompatActivity() {
             Log.d("onCreate","button1 clicked")
             startActivity(Intent(this, RecyclerViewActivity::class.java))
         }
+
+        val button2 = findViewById<Button>(R.id.button2)
+        button2.setOnClickListener { v ->
+            Log.d("onCreate","button2 clicked")
+            startActivity(Intent(this, NumberPickerActivity::class.java))
+        }
     }
 }

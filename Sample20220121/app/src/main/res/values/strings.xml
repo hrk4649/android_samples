@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Sample20220121</string>
     <string name="to_recycler_view">To recycler view</string>
+    <string name="to_number_picker">to number picker</string>
+    <string name="number_picker1">numberPicker1</string>
+    <string name="number_picker2">numberPicker2</string>
+    <string name="number_picker3">numberPicker3</string>
 </resources>
