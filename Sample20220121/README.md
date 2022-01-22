@@ -12,7 +12,7 @@ Confirmed Date: 2022/01/22
     - taking screenshot
         - ```DefaultFailureHandler.takeScreenshot()``` seemed not work at this time.
         - declare ```MyFailureHandler``` that implements ```FailureHandler```
-            - use ```UiDevice``` for taking screentest.
+            - use uiautomator's ```UiDevice``` for taking screentest.
         - call ```Espresso.setFailureHandler(MyFailureHandler(appContext))``` before test
 
 ## Environment
