@@ -4,13 +4,16 @@ package okinawa.flat_e.sample20220121
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
+import junit.framework.Assert.fail
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
@@ -28,8 +31,20 @@ class RecycleViewActivityTest {
     @JvmField
     var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
 
+    // TestWatcher may be called when failure occurred out of Espresso
+    @Rule(order = Integer.MIN_VALUE)
+    @JvmField
+    var watcher = ScreenshotTestWatcher()
+
+    /**
+     * This test will fail
+     */
     @Test
     fun recycleViewActivityTest() {
+        // use MyFailureHandler
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        Espresso.setFailureHandler(MyFailureHandler(appContext))
+
         val materialButton = onView(
             allOf(
                 withId(R.id.button1), withText("To recycler view"),
@@ -76,7 +91,8 @@ class RecycleViewActivityTest {
                 )
             )
         )
-        recyclerView3.perform(actionOnItemAtPosition<ViewHolder>(19, click()))
+        // test will fail: no item at position 20
+        recyclerView3.perform(actionOnItemAtPosition<ViewHolder>(20, click()))
     }
 
     private fun childAtPosition(
