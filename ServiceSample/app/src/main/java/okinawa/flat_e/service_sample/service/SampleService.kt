@@ -34,8 +34,8 @@ class SampleService : Service() {
         private set
 
     private val locationCallback = object: LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
-            location = locationResult?.lastLocation
+        override fun onLocationResult(locationResult: LocationResult) {
+            location = locationResult.lastLocation
             Log.d("SampleService.onLocationResult","location: $location")
             //DeployGate.logDebug("SampleService.onLocationResult:location: $location")
         }
