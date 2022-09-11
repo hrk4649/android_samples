@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WorkManagerSample</string>
+    <string name="notification_title">サンプルサービス</string>
+    <string name="notification_message">サービス起動中です・・・</string>
+    <string name="worker">ワーカー</string>
+    <string name="date_format">yyyy-MM-dd\'T\'HH:mm:ss.SSSZ</string>
+</resources>
