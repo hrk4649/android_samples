@@ -17,10 +17,12 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import okinawa.flat_e.service_sample.MainActivity
 import okinawa.flat_e.service_sample.R
+import java.util.*
 
 class SampleService : Service() {
     companion object {
         private const val ONGOING_NOTIFICATION_ID = 1
+
         // https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest
         private const val LOCATION_REQUEST_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY
         private const val LOCATION_REQUEST_INTERVAL_MILLISECOND = 30000L
@@ -28,20 +30,27 @@ class SampleService : Service() {
 
     private val binder = SampleServiceBinder()
 
-    private var fusedLocationClient:FusedLocationProviderClient? = null
+    private var fusedLocationClient: FusedLocationProviderClient? = null
 
     var location: Location? = null
         private set
 
-    private val locationCallback = object: LocationCallback() {
+    private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             location = locationResult.lastLocation
-            Log.d("SampleService.onLocationResult","location: $location")
+            Log.d("SampleService.onLocationResult", "location: $location")
             //DeployGate.logDebug("SampleService.onLocationResult:location: $location")
+
+            // 位置情報を取得したタイミングで通知を更新する
+            location?.let { location ->
+                val date = Date(location.time)
+                val txt = "$date (${location.latitude}, ${location.longitude})"
+                updateNotifyContent(createNotification(txt))
+            }
         }
     }
 
-    inner class SampleServiceBinder: Binder() {
+    inner class SampleServiceBinder : Binder() {
         fun get() = this@SampleService
     }
 
@@ -79,7 +88,8 @@ class SampleService : Service() {
             .setInterval(LOCATION_REQUEST_INTERVAL_MILLISECOND)
         fusedLocationClient = FusedLocationProviderClient(this)
         val result = fusedLocationClient?.requestLocationUpdates(
-            locationRequest, locationCallback, Looper.myLooper())
+            locationRequest, locationCallback, Looper.myLooper()
+        )
     }
 
     private fun stopLocationClient() {
@@ -90,12 +100,6 @@ class SampleService : Service() {
     private fun prepareForeground() {
         //Log.d("SampleService.prepareForeground","called")
         DeployGate.logDebug("SampleService.prepareForeground:called")
-        // https://developer.android.com/guide/components/foreground-services?hl=ja
-        // 通知をタップしたときにこのアクテビティを開く
-        val pendingIntent: PendingIntent =
-            Intent(applicationContext, MainActivity::class.java).let { notificationIntent ->
-                PendingIntent.getActivity(applicationContext, 0, notificationIntent, 0)
-            }
 
         // 通知の作成
         // https://qiita.com/naoi/items/03e76d10948fe0d45597#minsdkversion%E3%81%8C26%E4%BB%A5%E4%B8%8A%E3%81%AE%E5%A0%B4%E5%90%88
@@ -119,17 +123,40 @@ class SampleService : Service() {
             manager.createNotificationChannel(mChannel)
         }
 
-        val notification = NotificationCompat.Builder(this, channelId)
+        val notification = createNotification(notifyDescription)
+
+        // Notification ID cannot be 0.
+        startForeground(ONGOING_NOTIFICATION_ID, notification)
+    }
+
+    private fun updateNotifyContent(notification: Notification) {
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.notify(ONGOING_NOTIFICATION_ID, notification)
+    }
+
+    private fun createPendingIntent(): PendingIntent {
+        // https://developer.android.com/guide/components/foreground-services?hl=ja
+        // 通知をタップしたときにこのアクテビティを開く
+        val pendingIntent: PendingIntent =
+            Intent(applicationContext, MainActivity::class.java).let { notificationIntent ->
+                PendingIntent.getActivity(applicationContext, 0, notificationIntent, 0)
+            }
+        return pendingIntent
+    }
+
+    private fun createNotification(contentText: String): Notification {
+        val channelId = getString(R.string.app_name)
+
+        return NotificationCompat.Builder(this, channelId)
             .setContentTitle(channelId)
-            .setContentText(notifyDescription)
+            .setContentText(contentText)
             .setSmallIcon(R.drawable.ic_android_black_24dp)
-            .setContentIntent(pendingIntent)
+            .setContentIntent(createPendingIntent())
+            // 音を鳴らすのは1度だけにする
+            .setOnlyAlertOnce(true)
             // 5.0 以降 ティッカーは設定しても表示されない
             // https://phicdy.hatenablog.com/entry/android-notification-differences
             //.setTicker(getText(R.string.ticker_text))
             .build()
-
-        // Notification ID cannot be 0.
-        startForeground(ONGOING_NOTIFICATION_ID, notification)
     }
 }
