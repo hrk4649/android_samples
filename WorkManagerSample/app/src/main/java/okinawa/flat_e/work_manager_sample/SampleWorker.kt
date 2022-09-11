@@ -17,11 +17,37 @@ import java.util.*
 
 /**
  * サービスに接続し、通知を変更するワーカー
+ *
+ * サービスへの接続は非同期に行われるため、
+ * doWork()でサービスへの接続(applicationContext.bindService())を行っても、
+ * 即時にサービスの参照は取得できない。
+ * そのため、本クラスの初期化時に、サービスの接続を先行して行う。
+ *
+ * 参考
+ * Android how do I wait until a service is actually connected?
+ * https://stackoverflow.com/questions/3055599/android-how-do-i-wait-until-a-service-is-actually-connected
  */
 class SampleWorker(appContext: Context, workerParams: WorkerParameters):
     CoroutineWorker(appContext, workerParams) {
 
     private var serviceConnection: SampleServiceConnection? = SampleServiceConnection()
+
+    init {
+        bindService()
+    }
+
+    private fun bindService() {
+        // サービスに接続する
+        val bindIntent = Intent(applicationContext, SampleService::class.java)
+        serviceConnection?.let {
+            val bindResult = applicationContext.bindService(
+                bindIntent,
+                it,
+                0 // AppCompatActivity.BIND_AUTO_CREATE
+            )
+            Log.d("SampleWorker.init","bindResult: $bindResult service: this")
+        }
+    }
 
     companion object {
         private const val NOTIFICATION_ID = 2
@@ -38,27 +64,22 @@ class SampleWorker(appContext: Context, workerParams: WorkerParameters):
     override suspend fun doWork(): Result {
         Log.d("SampleWorker.doWork","called")
 
-        // サービスに接続する
-        val bindIntent = Intent(applicationContext, SampleService::class.java)
-        val bindResult = serviceConnection?.let { serviceConnection ->
-            applicationContext.bindService(
-                bindIntent,
-                serviceConnection,
-                0 // AppCompatActivity.BIND_AUTO_CREATE
-            )
-        } ?: false
-        // TODO サービスが取得できない場合があるのを解消する
-        val service = serviceConnection?.mService
-        Log.d("SampleWorker.doWork","bindResult: $bindResult service: $service")
-        service?.let {
-            val date = Date()
-            val format = SimpleDateFormat(
-                applicationContext.getString(R.string.date_format)
-            )
-            val txt = "From Worker:${format.format(date)}"
-            it.showMessageAsNotification(txt)
-            Log.d("SampleWorker.doWork","Notification: $txt")
-            // applicationContext.unbindService(serviceConnection)
+        if (serviceConnection?.mBound == true) {
+            val service = serviceConnection?.mService
+            Log.d("SampleWorker.doWork","service: $service")
+            service?.let {
+                val date = Date()
+                val format = SimpleDateFormat(
+                    applicationContext.getString(R.string.date_format)
+                )
+                val txt = "From Worker:${format.format(date)}"
+                it.showMessageAsNotification(txt)
+                Log.d("SampleWorker.doWork","Notification: $txt")
+                // applicationContext.unbindService(serviceConnection)
+            }
+        } else {
+            // サービスへの再接続を行う。
+            bindService()
         }
         return Result.success()
     }

@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             runCatching {
                 // ワーカーの起動をずらす
-                delay(30000)
+                delay(10000)
                 // 最低 15 分間隔
                 // https://developer.android.com/topic/libraries/architecture/workmanager/how-to/define-work?hl=ja#schedule_periodic_work
                 val workRequest = PeriodicWorkRequestBuilder<SampleWorker>(
