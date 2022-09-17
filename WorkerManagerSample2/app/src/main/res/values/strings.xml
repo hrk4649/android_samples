@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Worker Manager Sample2</string>
+    <string name="worker">ワーカー</string>
+</resources>
