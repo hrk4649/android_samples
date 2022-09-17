@@ -1,23 +1,16 @@
 package okinawa.flat_e.worker_manager_sample2
 
 import android.app.Notification
-import android.content.ContentUris
 import android.content.Context
-import android.net.Uri
-import android.os.Environment
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
-import java.io.BufferedWriter
-import java.io.File
-import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SampleWorker(appContext: Context, workerParams: WorkerParameters):
+class SampleWorker(appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
 
     companion object {
@@ -34,7 +27,7 @@ class SampleWorker(appContext: Context, workerParams: WorkerParameters):
         )
     }
 
-    private fun createNotification(contentText: String) : Notification {
+    private fun createNotification(contentText: String): Notification {
         val channelId = applicationContext.getString(R.string.app_name)
 
         return NotificationCompat.Builder(applicationContext, channelId)
@@ -48,7 +41,7 @@ class SampleWorker(appContext: Context, workerParams: WorkerParameters):
     }
 
     override suspend fun doWork(): Result {
-        Log.d("SampleWorker.doWork","called")
+        Log.d("SampleWorker.doWork", "called")
         val result = runCatching {
             val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
             val txt = "${format.format(Date())}"
@@ -58,7 +51,7 @@ class SampleWorker(appContext: Context, workerParams: WorkerParameters):
         return if (result.isSuccess) {
             Result.success()
         } else {
-            Log.e("SampleWorker.doWork","error", result.exceptionOrNull())
+            Log.e("SampleWorker.doWork", "error", result.exceptionOrNull())
             Result.failure()
         }
     }

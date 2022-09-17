@@ -1,9 +1,9 @@
 package okinawa.flat_e.worker_manager_sample2
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
@@ -25,6 +25,11 @@ class MainActivity : AppCompatActivity() {
         initTextView()
     }
 
+    /**
+     * アクティビティにファイルの内容を出力します。
+     *
+     * 画面を表示するタイミングで実行されます。
+     */
     private fun initTextView() {
         runCatching {
             val textView = findViewById<TextView>(R.id.textView)
@@ -33,13 +38,16 @@ class MainActivity : AppCompatActivity() {
             val lines = fileUtil.readLines()
             // TextView で改行する
             val txt = lines.joinToString('\n'.toString())
-            Log.d("MainActivity.initTextView","txt:$txt")
+            Log.d("MainActivity.initTextView", "txt:$txt")
             textView.text = txt
         }.onFailure {
-            Log.e("MainActivity.initTextView","error", it)
+            Log.e("MainActivity.initTextView", "error", it)
         }
     }
 
+    /**
+     * ワーカーの初期化
+     */
     private fun initWorkManager() {
         lifecycleScope.launch(Dispatchers.IO) {
             runCatching {
@@ -53,11 +61,9 @@ class MainActivity : AppCompatActivity() {
 
                 val workManager = WorkManager.getInstance(applicationContext)
                 workManager.enqueueUniquePeriodicWork(
-                    getString(R.string.worker)
-                    , ExistingPeriodicWorkPolicy.REPLACE
-                    , workRequest
+                    getString(R.string.worker), ExistingPeriodicWorkPolicy.REPLACE, workRequest
                 )
-                Log.d("MainActivity.initWorkManager","start worker")
+                Log.d("MainActivity.initWorkManager", "start worker")
             }
         }
     }
