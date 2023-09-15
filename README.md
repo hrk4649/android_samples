@@ -31,4 +31,5 @@
   - constraintlayout の Flow レイアウト
   - 参考 ConstraintLayout FlowでViewを動的に追加してみる https://qiita.com/zzt-osamuhanzawa/items/e2b67320000d0b7a9513
 - HelloJetpackCompose (2023/09/15)
+  - Jetpack Compose の チュートリアルを動かす
   - 参考 Jetpack Compose Tutorial https://developer.android.com/jetpack/compose/tutorial
