@@ -81,7 +81,8 @@ fun MessageCard(msg: Message) {
         var isExpanded by remember { mutableStateOf(false)}
 
         val surfaceColor by animateColorAsState(
-            if (isExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+            if (isExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+            label = "ColorAnimation"
         )
 
         Column(modifier = Modifier.clickable {isExpanded = !isExpanded}) {
